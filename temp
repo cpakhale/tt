@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Log in to Azure (if not already logged in)
+az login
+
+# Specify your Key Vault name
+keyvault_name="<your_keyvault_name>"
+
+# Get a list of secrets from the Key Vault and store them in an array
+secrets=($(az keyvault secret list --vault-name $keyvault_name --query "[].name" --output tsv))
+
+# Loop through the array of secrets
+for secret_name in "${secrets[@]}"; do
+    echo "Secret Name: $secret_name"
+    # You can perform additional actions with each secret here
+done
