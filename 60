@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Define the threshold date (60 days ago)
+threshold_date=$(date -d "60 days ago" +%Y-%m-%dT%H:%MZ)
+
+# Login to Azure (if not already logged in)
+az login
+
+# Get a list of secrets from the Key Vault
+secrets=$(az keyvault secret list --vault-name <your_keyvault_name> --query "[?attributes.updated<=\`$threshold_date\`]" --output tsv)
+
+# Loop through each secret and update it
+while IFS=$'\t' read -r secret; do
+    secret_name=$(echo "$secret" | cut -f 1)
+    secret_value=$(az keyvault secret show --vault-name <your_keyvault_name> --name "$secret_name" --query value --output tsv)
+    az keyvault secret set --vault-name <your_keyvault_name> --name "$secret_name" --value "$secret_value"
+done <<< "$secrets"
