@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Variables
+workspaceId="<YOUR_WORKSPACE_ID>"
+sharedKey="<YOUR_PRIMARY_KEY>"
+logType="CustomLog"
+jsonPayload='[{"event":"test event","property":"test property"}]'
+
+# Generate RFC1123 date
+rfc1123date=$(date -u "+%a, %d %b %Y %H:%M:%S GMT")
+
+# Calculate content length
+contentLength=$(echo -n "$jsonPayload" | wc -c)
+
+# Create signature
+stringToSign="POST\n$contentLength\napplication/json\nx-ms-date:$rfc1123date\n/api/logs"
+signature=$(echo -n "$stringToSign" | openssl dgst -sha256 -hmac "$sharedKey" -binary | base64)
+
+# Authorization header
+authHeader="SharedKey $workspaceId:$signature"
+
+# Send log via curl
+response=$(curl -X POST \
+  "https://$workspaceId.ods.opinsights.azure.com/api/logs?api-version=2016-04-01" \
+  -d "$jsonPayload" \
+  -H "Content-Type: application/json" \
+  -H "Log-Type: $logType" \
+  -H "x-ms-date: $rfc1123date" \
+  -H "Authorization: $authHeader")
+
+echo "Response: $response"
