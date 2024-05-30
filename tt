@@ -1,0 +1,13 @@
+# Variables
+ORGANIZATION="yourorganization"
+PROJECT="yourproject"
+BUILD_ID="yourbuildid"
+ARTIFACT_NAME="my-artifact"
+PAT="yourpersonalaccesstoken"
+
+# Get artifact download URL
+artifact_url=$(curl -u :$PAT \
+  "https://dev.azure.com/$ORGANIZATION/$PROJECT/_apis/build/builds/$BUILD_ID/artifacts?artifactName=$ARTIFACT_NAME&api-version=5.1" \
+  | jq -r '.value[0].resource.downloadUrl')
+
+echo "Download URL: $artifact_url"
