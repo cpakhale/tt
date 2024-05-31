@@ -1,18 +1,5 @@
-### Subject: No Action Required: Non-Disruptive Maintenance [MCOM/NSAS Shared Dev] Security Hardening - Key Vault Expiry and Notification Policy
+To set the GroupID value to 3000 for the storage class `openebs-no-replica-wx`, we need to recreate the storage class. This requires destroying all application PVCs currently using the `openebs-no-replica-wx` storage class.
 
-Hi Team,
-
-As part of the CSO team's mandate for security hardening, all Azure Key Vault objects (Certificates, Keys, Secrets) must be set with an expiration date. We will be addressing this requirement for both platform and application key vaults.
-
-The following actions will be implemented as part of our pipeline automation:
-
-- Set an expiration date (365 days) for secrets/keys that do not have an expiry set or have an expiry date exceeding 365 days.
-- Create a new version for secrets that have not been rotated in the last 60 days (e.g., MySQL host secret).
-
-Additionally, we are enhancing the OB pipeline to automatically set expiration dates when creating secrets and applying policies to enforce this practice.
+Please delete the application PVCs using the `openebs-no-replica-wx` storage class so that we can proceed with the reinstallation.
 
 Thank you.
-
-Best regards,
-
-[Your Name]
