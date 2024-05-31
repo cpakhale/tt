@@ -1,10 +1,17 @@
-Hi Prabhu,
+### Subject: No Action Required: Non-Disruptive Maintenance [MCOM/NSAS Shared Dev] Security Hardening - Key Vault Expiry and Notification Policy
 
-Currently, no applications are using Ultra Disk in the MCOM and NSAS environments. However, Ultra Disk is provisioned on each node in the AKS cluster, and we are being charged by Azure for these resources, even though they are not in use.
+Hi Team,
 
-We have already removed the provision of Ultra Disk from the Y node pool. To implement the same change on the X node pool, we need to vacate all applications from the X node pool.
+As part of the CSO team's mandate for security hardening, all Azure Key Vault objects (Certificates, Keys, Secrets) must be set with an expiration date. We will be addressing this requirement for both platform and application key vaults.
 
-Thank you for your cooperation.
+The following actions will be implemented as part of our pipeline automation:
+
+- Set an expiration date (365 days) for secrets/keys that do not have an expiry set or have an expiry date exceeding 365 days.
+- Create a new version for secrets that have not been rotated in the last 60 days (e.g., MySQL host secret).
+
+Additionally, we are enhancing the OB pipeline to automatically set expiration dates when creating secrets and applying policies to enforce this practice.
+
+Thank you.
 
 Best regards,
 
