@@ -1,10 +1,27 @@
-Dear Shobha,
+Subject: Cost Reduction Initiative: Disabling Ultra Disk on AKS Cluster
 
-Thank you so much for your kind words. It has been a pleasure working with the INLAP team, and I'm glad to have been able to assist with setting up the neon environments and addressing the CSO mandates. Your appreciation means a lot to me. 
+Dear Applications Team,
 
-Collaboration and teamwork are key to our success, and I’m grateful for the opportunity to support you, even during late hours. It’s rewarding to know that my efforts have made a positive impact, and I truly feel like a part of the INLAP family.
+As part of our ongoing efforts to reduce operational costs, we are making changes to the configuration of our Azure Kubernetes Service (AKS) cluster. Specifically, we will be disabling the use of Ultra Disk on the cluster.
 
-Thank you once again for your appreciation and support. I look forward to continuing our successful partnership.
+To initiate this change, we have already disabled Ultra Disk on the Y node pool. The next step involves migrating application workloads from the X node pool, which still uses Ultra Disk, to the Y node pool.
+
+We request your cooperation in this process by moving your application workloads from the X node pool to the Y node pool. This can be accomplished by bouncing (restarting) the pods associated with your applications. Here are the steps to follow:
+
+1. **Identify Pods in X Node Pool**: Use Kubernetes commands or your existing monitoring tools to list all pods currently running in the X node pool.
+2. **Update Deployment Configurations**: Ensure that your deployment configurations (Deployment, StatefulSet, DaemonSet, etc.) are set to use the Y node pool.
+3. **Bounce Pods**: Restart the pods so that they can be rescheduled onto the Y node pool. This can be done using the following command:
+   ```
+   kubectl rollout restart <deployment/statefulset/daemonset> <resource-name>
+   ```
+4. **Verify**: After the pods are restarted, verify that they are running in the Y node pool by checking the node assignment of each pod.
+
+We understand that this change may cause some disruptions, and we appreciate your cooperation in making this transition smooth. If you encounter any issues or need assistance, please do not hesitate to reach out to our support team.
+
+Thank you for your attention to this matter and for your continued collaboration.
 
 Best regards,
-[Your Name]
+
+[Your Name]  
+[Your Position]  
+[Your Contact Information]
