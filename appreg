@@ -1,0 +1,44 @@
+# Define local variables
+locals {
+  secret_map = {
+    "secret1" = "value1"
+    "secret2" = "value2"
+    "secret3" = "value3"
+  }
+}
+
+# Create an Azure AD Application
+resource "azuread_application" "this" {
+  name                    = "example-app"
+  display_name            = "Example App"
+  sign_in_audience        = "AzureADMyOrg"
+  prevent_duplicate_names = true
+}
+
+# Create the Service Principal linked to the application
+resource "azuread_service_principal" "this" {
+  application_id = azuread_application.this.application_id
+}
+
+# Create multiple secrets for the application
+resource "azuread_application_password" "this" {
+  for_each              = local.secret_map
+  application_object_id = azuread_application.this.id
+  display_name          = each.key
+  value                 = each.value
+  end_date              = "2099-01-01T00:00:00Z"
+  depends_on            = [azuread_application.this]
+}
+
+# Store secrets in Azure Key Vault
+data "azurerm_key_vault" "this" {
+  name                = "example-keyvault"
+  resource_group_name = "example-rg"
+}
+
+resource "azurerm_key_vault_secret" "this" {
+  for_each     = local.secret_map
+  name         = each.key
+  value        = azuread_application_password.this[each.key].value
+  key_vault_id = data.azurerm_key_vault.this.id
+}
