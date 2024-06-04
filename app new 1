@@ -1,0 +1,15 @@
+app_name         = "my-app-registration"
+kv_name          = "my-key-vault"
+kv_resource_group = "my-resource-group"
+secrets = {
+  "secret1" = {
+    value       = "secret-value-1"
+    description = "This is the first secret"
+    expiry      = "2024-12-31T23:59:59Z"
+  }
+  "secret2" = {
+    value       = "secret-value-2"
+    description = "This is the second secret"
+    expiry      = "2024-12-31T23:59:59Z"
+  }
+}
