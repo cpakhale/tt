@@ -1,0 +1,61 @@
+provider "azurerm" {
+  features {}
+}
+
+variable "app_name" {
+  description = "The name of the app registration."
+  type        = string
+}
+
+variable "kv_name" {
+  description = "The name of the existing Key Vault."
+  type        = string
+}
+
+variable "kv_resource_group" {
+  description = "The resource group of the existing Key Vault."
+  type        = string
+}
+
+variable "secrets" {
+  description = "A map of secret names to their values, descriptions, and expiry dates."
+  type = map(object({
+    value       = string
+    description = string
+    expiry      = string
+  }))
+}
+
+# Create the Azure AD Application
+resource "azuread_application" "app" {
+  name = var.app_name
+}
+
+# Create the Service Principal for the Application
+resource "azuread_service_principal" "sp" {
+  application_id = azuread_application.app.application_id
+}
+
+# Add the secrets to the existing Key Vault
+resource "azurerm_key_vault_secret" "secrets" {
+  for_each            = var.secrets
+  name                = each.key
+  value               = each.value.value
+  key_vault_id        = data.azurerm_key_vault.kv.id
+  content_type        = each.value.description
+  expiration_date     = each.value.expiry
+}
+
+# Get the existing Key Vault
+data "azurerm_key_vault" "kv" {
+  name                = var.kv_name
+  resource_group_name = var.kv_resource_group
+}
+
+output "application_id" {
+  value = azuread_application.app.application_id
+}
+
+output "service_principal_id" {
+  value = azuread_service_principal.sp.object_id
+}
