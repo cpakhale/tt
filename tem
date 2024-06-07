@@ -1,5 +1,3 @@
-Hi Team,
+Hi Kailas,
 
-According to the CSO mandate, every secret, key, or certificate in the key vault must have an expiration date. The application team should ensure that any secrets set manually or via az CLI command from the application container also have an expiration date.
-
-We have observed that many applications are storing AAF certificates via az CLI from the application container without an expiry date. When setting expiration dates for secrets or keys, please ensure they do not exceed 365 days.
+Going forward, we will include subscription details in the notification table. Occasionally, notifications are sent for multiple subscriptions, making it inappropriate to define the subscription in the subject line.
