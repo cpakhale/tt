@@ -1,8 +1,9 @@
-1) The temporary fix will address the following scenarios. However, if the application stores AAF certificates via container/pod, the AZ CLI command/code will need to be updated to set an expiration date.
+Hi Justin,
 
+This notification is intended for Azure applications only. Even though we have applied a temporary fix for all key vaults, if an application restarts a pod, it will trigger the AAF init container pod, creating a new version of the cert/tis secrets in the key vault without an expiration date. For a permanent fix, action is required from the Application Team/Developers. If the application stores AAF certificates via container/pod in the key vault, the AZ CLI command/code needs to be updated to set an expiration date, ensuring it does not exceed 365 days.
+
+1) The temporary fix will address the following scenarios:
 - Set an expiration date (365 days) for secrets/keys that either do not have an expiry set or have an expiry date exceeding 365 days.
 - Create a new version for secrets that have not been rotated in the last 60 days (e.g., MySQL host secret).
 - Even if AAF passwords have their own expiry, they still need to be set in the Key Vault. It is recommended to use the same expiry as AAF.
 - For Postgres Database / MySQL Database secrets: As a temporary fix, our pipeline will handle setting the expiry date. Additionally, we are enhancing the OB pipeline to automatically set expiration dates when creating secrets and applying policies to enforce this practice.
-
-**Action Required from the Application Team/Developers:** We have observed that many applications are storing AAF certificates via AZ CLI from the application container without an expiry date. Please update the AZ CLI command/code to set an expiration date, ensuring that the expiration date for secrets or keys does not exceed 365 days.
