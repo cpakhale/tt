@@ -1,1 +1,5 @@
-From tomorrow we are going to update X node pool with Disabling Ultra Disk on non-prod AKS Cluster. If your application workload still running on X nodepool, please move workload to Y nodepool else we will move forcefully workload and it will be disrup tive for your application.
+"As discussed during our call, the issue arose because the public network access setting was not defined in the current artifact. According to the new Azure changes, public network access must be explicitly set to false in the Terraform configuration when using a delegated subnet ID and a zone ID.
+
+To resolve this, we need to upgrade the artifact to the new provider version 3.104.2, which supports the public network access enabled parameter. This is critical for the application, as it will not be able to create a PostgreSQL database in the production environment without this parameter being set due to Azure's enforcement.
+
+@Gurajapu, Amar, could you please create a User Story to upgrade the artifact for PostgreSQL DB to support PE?"
