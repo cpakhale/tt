@@ -1,1 +1,5 @@
-"They are not requesting SA details for the DSLA site. The DSLA team expects action on the reported incident below. Further details are needed for investigation from the DSLA Alarm. You can open the link in the ticket to obtain more information, such as the source IP. If the source IP is from a pod or a known source, you need to identify what action is causing queries to the database without a user ID. As the platform team, we do not have visibility into this issue. The application team needs to conduct the initial investigation."
+Hi Swapna/Trupti,
+
+After further investigation, I found that the logs from the astra-cso-att namespace are being sent to both the ContainerLog and fluentbit tables. I noticed that the astra-cso-att namespace was not included in the exclude list in the container-azm config. I have now added it to the configmap.
+
+Regarding the fluentbit filter, we attempted to apply it in the non-production environment, but it did not reflect as expected. We have opened a defect for this issue, and Hong is currently looking into it.
