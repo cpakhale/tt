@@ -1,5 +1,13 @@
-Hi Swapna/Trupti,
+**Subject: Addressing Connectivity Issues for NEON South Central MySQL DB with DSLA EventHub**
 
-After further investigation, I found that the logs from the astra-cso-att namespace are being sent to both the ContainerLog and fluentbit tables. I noticed that the astra-cso-att namespace was not included in the exclude list in the container-azm config. I have now added it to the configmap.
+While onboarding DLSA for onboarded applications, we are encountering a connectivity issue between the NEON South Central MySQL DB and the eastus2/westus2 DSLA EventHub, due to the DSLA infrastructure being located in eastus2/westus2. For MySQL diagnostic settings, the EventHub namespace needs to be in the same region as the monitored resource if it is regional.
 
-Regarding the fluentbit filter, we attempted to apply it in the non-production environment, but it did not reflect as expected. We have opened a defect for this issue, and Hong is currently looking into it.
+We had a call with the DSLA team regarding this issue. They plan to discuss with their management next week the possibility of setting up a SouthCentral EventHub. This solution involves an associated cost and will require time to set up the entire environment in SouthCentral.
+
+In the interim, I have proposed the following temporary solution: We can configure the MySQL DB diagnostics with our existing EventHub, and the DSLA team will create a private endpoint from their subscription with a DLSA consumer group. This approach will ensure that the onboarded application complies with CSO requirements until the DSLA team provides a permanent solution.
+
+The drawback of this solution is that it will increase the injection cost for our EventHub.
+
+I have already reviewed this proposal with @BUNJAMIN, ANDRY, and he is good with this solution.
+
+@ATUKURI, NAVEEN, are we okay with the increased injection cost, or should we wait until the DSLA team provides SouthCentral connectivity?
