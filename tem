@@ -1,3 +1,1 @@
-Hi Ricardo,
-
-Thanks for the update. We haven't recently rebooted any AKS nodes. Could you please investigate why the maintenance notification was missed for this subscription and ensure that such disruptive maintenance notifications are not missed in the future?
+"Currently, the UpdateVM.sh script is not functioning on CentOS7 due to the lack of recent patches. The application is transitioning from the CentOS7 image to Rocky8 (31116.20240305.215625). We also want to retain 3.11_CentOS7 in case the application needs to revert to the CentOS7 OS."
