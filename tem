@@ -1,1 +1,2 @@
-"Currently, the UpdateVM.sh script is not functioning on CentOS7 due to the lack of recent patches. The application is transitioning from the CentOS7 image to Rocky8 (31116.20240305.215625). We also want to retain 3.11_CentOS7 in case the application needs to revert to the CentOS7 OS."
+As discussed in call Azure Event Hub network should be not public open, Astra flagging alerts from astra, as mitigation we need to disable public networks,
+you need make sure PE connectivity and service now subnet in firewall rule should be in place for connectivity.
