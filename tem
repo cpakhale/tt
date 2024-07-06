@@ -1,2 +1,1 @@
-As discussed in call Azure Event Hub network should be not public open, Astra flagging alerts from astra, as mitigation we need to disable public networks,
-you need make sure PE connectivity and service now subnet in firewall rule should be in place for connectivity.
+kubectl get pods -o json | jq '[.items[] | {name: .metadata.name, status: .status.phase, ready: (.status.containerStatuses[] | select(.ready == true) | true) // false, restart: (.status.containerStatuses[] | .restartCount), age: ((now - (.metadata.creationTimestamp | fromdateiso8601)) / 86400 | floor | tostring + "d")}]'
