@@ -1,4 +1,1 @@
-kubectl get pods -o json | jq '[.items[] | {name: .metadata.name, status: .status.phase, restarts: .status.containerStatuses[0].restartCount}]'
-
-
-kubectl get pods -o json | jq '[.items[] | {name: .metadata.name, status: .status.phase, age: (now - (.status.startTime | fromdateiso8601)) | floor | . / 86400 | tostring + "d"}]' > pods_status.json
+This was pot due to script for secrets update, this was open network manually for troubleshoot to access KV via portal. I discussed with team in scrum call to make sure we are not opening public network. Going forward if required access suggested to use system ip for ATT subnet in firewall to limit network access.
