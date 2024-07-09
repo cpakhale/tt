@@ -1,1 +1,31 @@
-This was pot due to script for secrets update, this was open network manually for troubleshoot to access KV via portal. I discussed with team in scrum call to make sure we are not opening public network. Going forward if required access suggested to use system ip for ATT subnet in firewall to limit network access.
+Certainly! Here’s a detailed script for your presentation based on the provided content:
+
+---
+
+**Slide 1: Introduction**
+
+"Thanks for watching the introduction video. Now, let's dive into the ScalePipe architecture design."
+
+**Slide 2: Overview of ScalePipe Architecture**
+
+"Our architecture is divided into two main sections. In the first section, we include application configuration for the targeted resource and environment details. This also encompasses ScalePipe configuration, which operates with a pipeline based on webhook and cronjob."
+
+**Slide 3: Section 1 - Application and Environment Configuration**
+
+"In this section, we focus on the application configuration for targeted resources and the details of the environment. Users will set configurations according to their requirements. For instance, for an AKS resource type like a deployment or daemon set, users can specify the scale-down count, scale-up count, environment, notification details, and schedule. Once these settings are saved in the application repository in the correct format, our ADO pipeline is triggered to validate and import the configuration into the ScalePipe execution configuration."
+
+**Slide 4: Section 2 - Targeted Resource Scaling**
+
+"In the second section, we focus on the targeted resources that we aim to scale based on requirements. The ScalePipe pipeline, triggered by the cronjob, scans all application configurations. Based on predefined conditions, the pipeline will take the necessary actions. For example, if any application is configured to scale down to 0, the script will scale down the targeted resource and send a notification to the application."
+
+**Slide 5: Future Enhancements**
+
+"Looking ahead, we plan to introduce a custom schedule feature. This will provide users with the flexibility to scale resources based on ad-hoc requests. Additionally, we aim to implement functionalities to spin up and destroy new resources on demand for development or proof of concept (POC) requirements."
+
+**Slide 6: Conclusion**
+
+"To summarize, the ScalePipe architecture is designed to efficiently manage resource scaling based on user-defined configurations and schedules. With future enhancements, we aim to offer even more flexibility and functionality to meet diverse scaling needs. Thank you for your attention."
+
+---
+
+Feel free to adjust any part of the script to better fit your presentation style or specific details.
