@@ -1,5 +1,7 @@
 Hi Steve,
 
-Over the past few weeks, we have been experiencing disk space issues on the ELK Kibana dashboard. We have had to frequently clean up old indexes to prevent the dashboard from crashing. Currently, we have a cleanup policy with a 15-day retention period, but this is not sufficient given our current disk space.
+We've been experiencing disk space issues on the ELK Kibana dashboard over the past couple of weeks. We've needed to frequently clean up old indexes to prevent the dashboard from crashing. Currently, our cleanup policy is set to a 15-day retention period, but this isn't sufficient with the current disk space available.
 
-I have already reported the issue, as the telk-logstash namespace has been sending significantly more log events compared to other namespaces for the past month. Until this is investigated, we can temporarily update the cleanup policy from a 15-day to a 10-day retention period to avoid further disk space issues for the Kibana dashboard.
+I've already reported that the `telk-logstash` namespace has been sending significantly more log events than other namespaces since last month. Until this is resolved, could you please confirm if we can update the cleanup policy to a 10-day retention period to help avoid further disk space issues for the Kibana dashboard?
+
+Thank you.
