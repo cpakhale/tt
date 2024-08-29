@@ -1,1 +1,23 @@
-"As we discussed last week, the telk-logstash namespace is sending significantly more log events compared to other namespaces. The ops team needs to analyze whether these log volumes are expected. If they are, we may need to adjust the rotation policy for the NSAS prod Kibana. Additionally, the NSAS Ops team should confirm if any new services or components have been deployed that could be generating these logs."
+#!/bin/bash
+
+# Variables
+KEY_VAULT_NAME="your-key-vault-name"
+SECRET_NAME="your-secret-name"
+
+# Get the latest version of the secret
+latest_version=$(az keyvault secret show --vault-name "$KEY_VAULT_NAME" --name "$SECRET_NAME" --query id -o tsv)
+
+# Get all versions of the secret
+secret_versions=$(az keyvault secret list-versions --vault-name "$KEY_VAULT_NAME" --name "$SECRET_NAME" --query "[].id" -o tsv)
+
+# Loop through all versions and disable the older ones
+for version in $secret_versions; do
+    if [ "$version" != "$latest_version" ]; then
+        echo "Disabling version: $version"
+        az keyvault secret set-attributes --id "$version" --enabled false
+    else
+        echo "Keeping the latest version: $version"
+    fi
+done
+
+echo "Older secret versions disabled."
