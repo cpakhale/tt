@@ -1,51 +1,5 @@
-#!/bin/bash
+Hi Steve,
 
-# Function to send notifications (via email or Slack)
-send_notification() {
-    local service_principal=$1
-    local secret_name=$2
-    local expiry_date=$3
+Over the past few weeks, we have been experiencing disk space issues on the ELK Kibana dashboard. We have had to frequently clean up old indexes to prevent the dashboard from crashing. Currently, we have a cleanup policy with a 15-day retention period, but this is not sufficient given our current disk space.
 
-    # Example: Send email (requires mailx or similar configured)
-    echo "Service Principal: $service_principal
-    Secret: $secret_name
-    Expiry Date: $expiry_date" | mail -s "Azure Secret Expiry Warning" recipient@example.com
-
-    # Example: Send Slack notification (requires configured Slack webhook)
-    curl -X POST -H 'Content-type: application/json' --data "{
-        \"text\": \"Azure Secret Expiry Warning: Service Principal: $service_principal, Secret: $secret_name, Expiry Date: $expiry_date\"
-    }" https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
-}
-
-# Threshold for expiry warning (in days)
-THRESHOLD_DAYS=30
-
-# List of Service Principal IDs to monitor
-SERVICE_PRINCIPALS=("sp_id_1" "sp_id_2" "sp_id_3")
-
-# Current date
-current_date=$(date +%s)
-
-for sp_id in "${SERVICE_PRINCIPALS[@]}"; do
-    # Get the list of secrets for the service principal
-    secrets=$(az ad sp credential list --id "$sp_id")
-
-    for row in $(echo "$secrets" | jq -r '.[] | @base64'); do
-        _jq() {
-            echo "${row}" | base64 --decode | jq -r "${1}"
-        }
-
-        secret_name=$(_jq '.keyId')
-        end_date=$(_jq '.endDateTime')
-
-        # Convert expiry date to epoch
-        expiry_date=$(date -d "$end_date" +%s)
-
-        # Calculate days until expiry
-        days_until_expiry=$(( (expiry_date - current_date) / 86400 ))
-
-        if (( days_until_expiry < THRESHOLD_DAYS )); then
-            send_notification "$sp_id" "$secret_name" "$end_date"
-        fi
-    done
-done
+I have already reported the issue, as the telk-logstash namespace has been sending significantly more log events compared to other namespaces for the past month. Until this is investigated, we can temporarily update the cleanup policy from a 15-day to a 10-day retention period to avoid further disk space issues for the Kibana dashboard.
