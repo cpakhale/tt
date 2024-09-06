@@ -1,1 +1,1 @@
-az keyvault secret list-versions --vault-name <YourKeyVaultName> --name <YourSecretName> --query "[?attributes.enabled==`true`]" --output table
+kubectl get nodes -o jsonpath='{range .items[*]}{.status.capacity.cpu}{"\n"}{end}' | awk '{s+=$1} END {print s}'
