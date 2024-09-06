@@ -1,1 +1,1 @@
-kubectl get nodes -o jsonpath='{range .items[*]}{.status.capacity.cpu}{"\n"}{end}' | awk '{s+=$1} END {print s}'
+az keyvault key list-versions --vault-name <YourKeyVaultName> --name <KeyName> --query "[?attributes.enabled==true].{Version:key.kid}"
