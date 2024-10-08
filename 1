@@ -1,3 +1,16 @@
-“Hi Kailas,
-Whenever the application team triggers the namespace pipeline, it creates a new token for Vault, which affects the Vault pods. Anurag is currently working on a fix for the pipeline.
-As a temporary workaround, I have disabled the Vault layer in the namespace pipeline to prevent further impact on Vault.”
+import requests
+
+# Define the proxy dictionary
+proxies = {
+    'http': 'http://your_proxy_address:proxy_port',
+    'https': 'https://your_proxy_address:proxy_port',
+}
+
+# URL you want to send the request to
+url = 'https://example.com'
+
+# Send the GET request using the proxy
+response = requests.get(url, proxies=proxies)
+
+# Print the response content
+print(response.text)
