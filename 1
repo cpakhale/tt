@@ -1,16 +1,21 @@
-import requests
+import subprocess
 
-# Define the proxy dictionary
-proxies = {
-    'http': 'http://your_proxy_address:proxy_port',
-    'https': 'https://your_proxy_address:proxy_port',
-}
+# Define your curl command with proxy and authentication details
+curl_command = [
+    'curl',
+    '--proxy', 'http://username:password@proxy_address:proxy_port',  # Proxy with authentication
+    '--cacert', '/path/to/ca_cert.pem',  # Path to CA certificate
+    '--user', 'destination_user:destination_password',  # Destination server authentication
+    '--url', 'https://destination_server.com',  # Destination URL
+    '--proxy-user', 'proxy_username:proxy_password',  # Proxy server authentication
+    '--proxy-cert', '/path/to/proxy_cert.pem',  # Proxy certificate if needed
+    '--proxy-key', '/path/to/proxy_key.pem',  # Proxy key if needed
+    '--verbose'  # Enable verbose output for debugging
+]
 
-# URL you want to send the request to
-url = 'https://example.com'
+# Run the curl command
+result = subprocess.run(curl_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-# Send the GET request using the proxy
-response = requests.get(url, proxies=proxies)
-
-# Print the response content
-print(response.text)
+# Print the result
+print('STDOUT:', result.stdout.decode())
+print('STDERR:', result.stderr.decode())
