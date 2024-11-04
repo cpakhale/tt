@@ -1,3 +1,8 @@
-Feedback for Anurag:
+Hi Purshittom,
 
-Anurag consistently delivers code on time and demonstrates a strong commitment to supporting both non-production and production environments. His proactive approach and willingness to help with any issues that arise have been invaluable to the team. His reliability and dedication make a positive impact on our project’s success. Great work, Anurag!
+As discussed on Friday, here are the two options we have for generating an access token without user intervention or dependency:
+
+	1.	Create a New App Registration per Subscription: For each subscription, we can create a new app registration with the necessary permissions to perform auto-shutdown for Azure resources. The application team will provide the client ID and secret, which we will store securely in Key Vault. We can then use this client ID and secret to generate tokens on demand as needed. (Secret updates will be managed by the application team.)
+	2.	Use ADO Agent VMSS Object ID as App Registration Owner: For each subscription, we create a new app registration with the required access for auto-shutdown on Azure resources and assign our ADO agent VMSS object ID as the owner of the app registration. This way, we can generate access tokens as needed without managing any secrets.
+
+Let me know your thoughts on these options.
