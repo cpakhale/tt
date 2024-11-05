@@ -1,31 +1,7 @@
-#!/bin/bash
+Hi all,
 
-# Variables
-workspaceId="<YOUR_WORKSPACE_ID>"
-sharedKey="<YOUR_PRIMARY_KEY>"
-logType="CustomLog"
-jsonPayload='[{"event":"test event","property":"test property"}]'
+According to CSO guidelines, we need to disable inbound internet traffic from any source across all ports on Azure NSGs. To comply, we will disable inbound internet access for the APIM NSG, scheduled for November 11. After implementation, validation from the application side will be required.
 
-# Generate RFC1123 date
-rfc1123date=$(date -u "+%a, %d %b %Y %H:%M:%S GMT")
+Could you please assist with flow validation on November 11 for the following connections: PDAS to INLAP, PRODAPT to INLAP, and ATT to INLAP, to verify the APIM changes?
 
-# Calculate content length
-contentLength=$(echo -n "$jsonPayload" | wc -c)
-
-# Create signature
-stringToSign="POST\n$contentLength\napplication/json\nx-ms-date:$rfc1123date\n/api/logs"
-signature=$(echo -n "$stringToSign" | openssl dgst -sha256 -hmac "$sharedKey" -binary | base64)
-
-# Authorization header
-authHeader="SharedKey $workspaceId:$signature"
-
-# Send log via curl
-response=$(curl -X POST \
-  "https://$workspaceId.ods.opinsights.azure.com/api/logs?api-version=2016-04-01" \
-  -d "$jsonPayload" \
-  -H "Content-Type: application/json" \
-  -H "Log-Type: $logType" \
-  -H "x-ms-date: $rfc1123date" \
-  -H "Authorization: $authHeader")
-
-echo "Response: $response"
+Thank you.
