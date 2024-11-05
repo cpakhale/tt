@@ -1,8 +1,77 @@
-Hi Purshittom,
+To trigger an Azure DevOps (ADO) pipeline via another ADO pipeline with different parameters, you can use the REST API provided by Azure DevOps in combination with the Invoke REST API task. Here’s a step-by-step guide:
 
-As discussed on Friday, here are the two options we have for generating an access token without user intervention or dependency:
+Step 1: Get Personal Access Token (PAT)
 
-	1.	Create a New App Registration per Subscription: For each subscription, we can create a new app registration with the necessary permissions to perform auto-shutdown for Azure resources. The application team will provide the client ID and secret, which we will store securely in Key Vault. We can then use this client ID and secret to generate tokens on demand as needed. (Secret updates will be managed by the application team.)
-	2.	Use ADO Agent VMSS Object ID as App Registration Owner: For each subscription, we create a new app registration with the required access for auto-shutdown on Azure resources and assign our ADO agent VMSS object ID as the owner of the app registration. This way, we can generate access tokens as needed without managing any secrets.
+Ensure you have a Personal Access Token (PAT) with the necessary permissions to trigger pipelines.
 
-Let me know your thoughts on these options.
+Step 2: Create the Triggering Pipeline
+
+In your main pipeline (let’s call it MainPipeline), add a task to invoke the REST API to trigger the secondary pipeline (SecondaryPipeline). You can use the Invoke REST API task for this.
+
+# azure-pipelines.yml for MainPipeline
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: InvokeRESTAPI@1
+  displayName: 'Trigger SecondaryPipeline'
+  inputs:
+    serviceConnection: '<YourServiceConnection>' # Service connection with the PAT
+    urlSuffix: '_apis/pipelines/<SecondaryPipelineID>/runs?api-version=6.0-preview.1'
+    method: 'POST'
+    headers: |
+      Authorization: Bearer $(System.AccessToken)
+      Content-Type: application/json
+    body: |
+      {
+        "resources": {
+          "repositories": {
+            "self": {
+              "refName": "refs/heads/main"
+            }
+          }
+        },
+        "templateParameters": {
+          "parameter1": "value1",
+          "parameter2": "value2"
+        }
+      }
+    waitForCompletion: 'false'
+
+Step 3: Configure Service Connection
+
+Make sure to configure a service connection in your Azure DevOps project that uses the PAT.
+
+Step 4: Use Parameters in Secondary Pipeline
+
+Define the parameters in the SecondaryPipeline that will be passed from the MainPipeline.
+
+# azure-pipelines.yml for SecondaryPipeline
+parameters:
+- name: parameter1
+  type: string
+  default: 'defaultValue1'
+- name: parameter2
+  type: string
+  default: 'defaultValue2'
+
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: |
+    echo "Parameter 1: $(parameter1)"
+    echo "Parameter 2: $(parameter2)"
+  displayName: 'Display Parameters'
+
+Summary
+
+	1.	MainPipeline: Configured to invoke the SecondaryPipeline using the REST API with custom parameters.
+	2.	SecondaryPipeline: Configured to accept parameters and perform tasks based on those parameters.
+
+Ensure that the PAT and service connection are properly configured, and the secondary pipeline ID is correct. This setup will trigger the SecondaryPipeline from the MainPipeline with the specified parameters.
