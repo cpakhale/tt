@@ -1,7 +1,17 @@
-Hi Steve,
-
-We've been experiencing disk space issues on the ELK Kibana dashboard over the past couple of weeks. We've needed to frequently clean up old indexes to prevent the dashboard from crashing. Currently, our cleanup policy is set to a 15-day retention period, but this isn't sufficient with the current disk space available.
-
-I've already reported that the `telk-logstash` namespace has been sending significantly more log events than other namespaces since last month. Until this is resolved, could you please confirm if we can update the cleanup policy to a 10-day retention period to help avoid further disk space issues for the Kibana dashboard?
-
-Thank you.
+curl -u :abc123 \
+     -X POST \
+     -H "Content-Type: application/json" \
+     -d '{
+           "resources": {
+             "repositories": {
+               "self": {
+                 "refName": "refs/heads/main"
+               }
+             }
+           },
+           "templateParameters": {
+             "param1": "value1",
+             "param2": "value2"
+           }
+         }' \
+     "https://dev.azure.com/myorg/myproject/_apis/pipelines/42/runs?api-version=6.0-preview.1"
