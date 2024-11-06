@@ -1,7 +1,1 @@
-Hi all,
-
-According to CSO guidelines, we need to disable inbound internet traffic from any source across all ports on Azure NSGs. To comply, we will disable inbound internet access for the APIM NSG, scheduled for November 11. After implementation, validation from the application side will be required.
-
-Could you please assist with flow validation on November 11 for the following connections: PDAS to INLAP, PRODAPT to INLAP, and ATT to INLAP, to verify the APIM changes?
-
-Thank you.
+We have noticed that one or more applications are still using the AKS proxy for the following endpoint. Please ensure that this endpoint is accessed through the appropriate route, as we plan to disable the AKS proxy next week. This change may impact your application if it currently relies on the AKS proxy for any endpoint.
