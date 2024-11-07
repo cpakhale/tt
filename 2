@@ -1,17 +1,75 @@
-curl -u :abc123 \
-     -X POST \
-     -H "Content-Type: application/json" \
-     -d '{
-           "resources": {
-             "repositories": {
-               "self": {
-                 "refName": "refs/heads/main"
-               }
-             }
-           },
-           "templateParameters": {
-             "param1": "value1",
-             "param2": "value2"
-           }
-         }' \
-     "https://dev.azure.com/myorg/myproject/_apis/pipelines/42/runs?api-version=6.0-preview.1"
+To run a command with parameters on an Azure Virtual Machine (VM) using az vm run-command invoke, you can pass parameters through the --parameters flag. This can be useful for scenarios where you want to run a script on the VM and need to pass in specific values.
+
+Here’s how to set it up with examples.
+
+Syntax for az vm run-command invoke with Parameters
+
+az vm run-command invoke \
+  --command-id RunShellScript \
+  --name <vm-name> \
+  --resource-group <resource-group> \
+  --scripts "<your-script-content-or-path>" \
+  --parameters <parameter-name1>=<value1> <parameter-name2>=<value2>
+
+	•	--command-id: Use RunShellScript for Linux VMs or RunPowerShellScript for Windows VMs.
+	•	--name: The name of the VM on which to run the command.
+	•	--resource-group: The resource group containing the VM.
+	•	--scripts: The script content to be executed or a path to the script.
+	•	--parameters: Define parameters as key=value pairs. These parameters are passed as arguments to the script.
+
+Example 1: Passing Parameters to a Shell Script on a Linux VM
+
+Script Example (example.sh)
+
+Suppose you have a script (example.sh) that accepts two parameters:
+
+#!/bin/bash
+echo "Parameter 1: $1"
+echo "Parameter 2: $2"
+
+Run Command with Parameters
+
+You can pass these parameters using az vm run-command invoke like this:
+
+az vm run-command invoke \
+  --command-id RunShellScript \
+  --name MyLinuxVM \
+  --resource-group MyResourceGroup \
+  --scripts "/path/to/example.sh" \
+  --parameters param1="Hello" param2="World"
+
+In this case:
+
+	•	param1="Hello" and param2="World" are the parameters that the script will receive.
+	•	Inside example.sh, $1 will be Hello and $2 will be World.
+
+Example 2: Inline Script with Parameters
+
+If you prefer to use an inline script instead of a separate file, you can specify the script directly with --scripts and use the parameters:
+
+az vm run-command invoke \
+  --command-id RunShellScript \
+  --name MyLinuxVM \
+  --resource-group MyResourceGroup \
+  --scripts "echo 'Parameter 1: $1'; echo 'Parameter 2: $2'" \
+  --parameters param1="Hello" param2="World"
+
+Example 3: Windows VM with PowerShell Script and Parameters
+
+For Windows VMs, you can use the RunPowerShellScript command ID and pass parameters similarly:
+
+# PowerShell Script Example (inline in command)
+az vm run-command invoke \
+  --command-id RunPowerShellScript \
+  --name MyWindowsVM \
+  --resource-group MyResourceGroup \
+  --scripts "Write-Output 'Parameter 1: $param1'; Write-Output 'Parameter 2: $param2'" \
+  --parameters param1="Hello" param2="World"
+
+Important Notes
+
+	•	Script Parameters: Parameters are positional by default. You may need to adapt the script on the VM to accept named parameters if necessary.
+	•	Command Limits: There may be limits to the size and complexity of inline scripts. For complex scripts, consider uploading them to the VM or using the CustomScript extension.
+	•	Permission: Ensure you have the necessary permissions to run commands on the VM.
+
+These examples show how to use az vm run-command invoke to run scripts with parameters on Azure VMs.
