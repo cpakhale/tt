@@ -1,3 +1,19 @@
-Here’s some feedback for Suman:
+parameters:
+  - name: repositoryName
+    type: string
+    default: 'my-project/my-repo'
+    displayName: 'Repository Name'
 
-“Great work, Suman! Your efforts on ServiceNow, MID Server, NCAAS platform, and enterprise port assignment have been invaluable. Your ability to manage these complex systems shows a deep understanding and commitment to our technical requirements. Your attention to detail and proactive approach in troubleshooting have made a significant positive impact on our team’s productivity. Keep up the excellent work!”
+resources:
+  repositories:
+    - repository: myRepoAlias
+      type: git
+      name: ${{ parameters.repositoryName }}
+      ref: main
+
+jobs:
+  - job: Build
+    steps:
+      - checkout: myRepoAlias
+      - script: |
+          echo "Building code from repository: ${{ parameters.repositoryName }}"
