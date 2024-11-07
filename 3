@@ -1,1 +1,42 @@
-We have noticed that one or more applications are still using the AKS proxy for the following endpoint. Please ensure that this endpoint is accessed through the appropriate route, as we plan to disable the AKS proxy next week. This change may impact your application if it currently relies on the AKS proxy for any endpoint.
+To run a local script on an Azure Virtual Machine (VM) using az vm run-command invoke with parameters, you can pass arguments to the script by using the --parameters flag. Here is an example of how to do it.
+
+Example Command:
+
+az vm run-command invoke \
+  --command-id RunShellScript \
+  --name <vm-name> \
+  --resource-group <resource-group> \
+  --scripts "/path/to/your/script.sh" \
+  --parameters arg1=value1 arg2=value2
+
+Explanation of Parameters:
+
+	•	--command-id: Specifies the command to execute. Use RunShellScript for Linux VMs or RunPowerShellScript for Windows VMs.
+	•	--name: The name of your VM.
+	•	--resource-group: The resource group containing the VM.
+	•	--scripts: Specifies the path to the script you want to run on the VM.
+	•	--parameters: Sets the parameters for your script, using a key=value format.
+
+Example Script (script.sh):
+
+For instance, if your script accepts two parameters, you can handle them as follows:
+
+#!/bin/bash
+echo "Parameter 1: $1"
+echo "Parameter 2: $2"
+
+Running the Command:
+
+To run script.sh on the VM with two parameters:
+
+az vm run-command invoke \
+  --command-id RunShellScript \
+  --name myVM \
+  --resource-group myResourceGroup \
+  --scripts "/path/to/script.sh" \
+  --parameters arg1="Hello" arg2="World"
+
+Important Notes:
+
+	•	Ensure that the VM has the correct permissions and setup to accept the az command.
+	•	The --parameters flag is specific to your script and can pass multiple key-value pairs.
