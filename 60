@@ -1,17 +1,1 @@
-#!/bin/bash
-
-# Define the threshold date (60 days ago)
-threshold_date=$(date -d "60 days ago" +%Y-%m-%dT%H:%MZ)
-
-# Login to Azure (if not already logged in)
-az login
-
-# Get a list of secrets from the Key Vault
-secrets=$(az keyvault secret list --vault-name <your_keyvault_name> --query "[?attributes.updated<=\`$threshold_date\`]" --output tsv)
-
-# Loop through each secret and update it
-while IFS=$'\t' read -r secret; do
-    secret_name=$(echo "$secret" | cut -f 1)
-    secret_value=$(az keyvault secret show --vault-name <your_keyvault_name> --name "$secret_name" --query value --output tsv)
-    az keyvault secret set --vault-name <your_keyvault_name> --name "$secret_name" --value "$secret_value"
-done <<< "$secrets"
+Please find the schedule below for the NPRD application shutdown during the holiday period, aimed at cost savings for the $1, S2, and S3 environments, covering all applications running in Azure. Let us know if you have any concerns.
