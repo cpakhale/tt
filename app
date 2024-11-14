@@ -1,65 +1,48 @@
-To create a binary executable from a shell script using Perl, you can use a Perl wrapper approach, where the shell script is embedded in a Perl program. Here’s how to do it:
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
-1. Embed the Shell Script in Perl
+public class ShellScriptHider {
 
-	1.	First, put your shell script as a multi-line string in a Perl file.
-	2.	Then, use Perl to write the script to a temporary file, make it executable, and execute it.
+    public static void main(String[] args) {
+        try {
+            // Define the shell script as a string
+            String script = "#!/bin/bash\n"
+                          + "echo 'Hello from the hidden shell script!'\n"
+                          + "# Add additional shell commands here\n";
 
-Here’s an example:
+            // Create a temporary file to store the script
+            File tempScript = File.createTempFile("tempScript", ".sh");
 
-#!/usr/bin/perl
-use strict;
-use warnings;
-use File::Temp 'tempfile';
-use File::chmod;
+            // Write the shell script to the temporary file
+            FileWriter writer = new FileWriter(tempScript);
+            writer.write(script);
+            writer.close();
 
-# Your shell script embedded in Perl
-my $shell_script = <<'END_SCRIPT';
-#!/bin/bash
-echo "Hello from the shell script!"
-# Add your shell script content here
-END_SCRIPT
+            // Make the file executable
+            tempScript.setExecutable(true);
 
-# Create a temporary file to store the shell script
-my ($fh, $filename) = tempfile();
-print $fh $shell_script;
-close $fh;
+            // Execute the shell script
+            ProcessBuilder processBuilder = new ProcessBuilder(tempScript.getAbsolutePath());
+            processBuilder.redirectErrorStream(true);
+            Process process = processBuilder.start();
 
-# Make the script executable
-chmod 0755, $filename;
+            // Capture and print the output of the script
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+            }
 
-# Execute the script
-system($filename);
-
-# Clean up
-unlink $filename;
-
-2. Save and Run
-
-	1.	Save this Perl script as script_wrapper.pl.
-	2.	Make it executable:
-
-chmod +x script_wrapper.pl
-
-
-	3.	Run the script:
-
-./script_wrapper.pl
-
-
-
-3. Compile the Perl Script into a Binary
-
-To create a binary executable from the Perl script, you can use PAR::Packer, which allows you to compile Perl scripts into standalone binaries.
-	1.	Install PAR::Packer if it’s not already installed:
-
-cpan install PAR::Packer
-
-
-	2.	Use pp to compile the Perl script:
-
-pp -o script_binary script_wrapper.pl
-
-
-
-This will produce a standalone binary named script_binary. When executed, it will run the embedded shell script as if it were a native binary.
+            // Clean up by deleting the temporary script file
+            tempScript.deleteOnExit();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
