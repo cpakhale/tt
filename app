@@ -1,87 +1,65 @@
-provider "azurerm" {
-  features {}
-}
+To create a binary executable from a shell script using Perl, you can use a Perl wrapper approach, where the shell script is embedded in a Perl program. Here’s how to do it:
 
-provider "azuread" {
-  tenant_id = var.tenant_id
-}
+1. Embed the Shell Script in Perl
 
-# Variables for app name and secret names
-variable "app_name" {
-  type        = string
-  description = "Name of the Azure AD application"
-}
+	1.	First, put your shell script as a multi-line string in a Perl file.
+	2.	Then, use Perl to write the script to a temporary file, make it executable, and execute it.
 
-variable "secret_names" {
-  type        = list(string)
-  description = "List of secret names to create"
-}
+Here’s an example:
 
-variable "tenant_id" {
-  type        = string
-  description = "The Azure Active Directory tenant ID"
-}
+#!/usr/bin/perl
+use strict;
+use warnings;
+use File::Temp 'tempfile';
+use File::chmod;
 
-# Resource Group for Key Vault
-resource "azurerm_resource_group" "example" {
-  name     = "${var.app_name}-rg"
-  location = "East US"
-}
+# Your shell script embedded in Perl
+my $shell_script = <<'END_SCRIPT';
+#!/bin/bash
+echo "Hello from the shell script!"
+# Add your shell script content here
+END_SCRIPT
 
-# Key Vault to store secrets
-resource "azurerm_key_vault" "example" {
-  name                        = "${var.app_name}-kv"
-  location                    = azurerm_resource_group.example.location
-  resource_group_name         = azurerm_resource_group.example.name
-  tenant_id                   = var.tenant_id
-  sku_name                    = "standard"
-  purge_protection_enabled    = true
-  soft_delete_retention_days  = 90
+# Create a temporary file to store the shell script
+my ($fh, $filename) = tempfile();
+print $fh $shell_script;
+close $fh;
 
-  access_policy {
-    tenant_id = var.tenant_id
-    object_id = azuread_application.example.object_id
+# Make the script executable
+chmod 0755, $filename;
 
-    secret_permissions = [
-      "get",
-      "list",
-      "set",
-      "delete",
-      "purge"
-    ]
-  }
-}
+# Execute the script
+system($filename);
 
-# Azure AD Application
-resource "azuread_application" "example" {
-  display_name = var.app_name
-}
+# Clean up
+unlink $filename;
 
-# Service Principal for the Application
-resource "azuread_service_principal" "example" {
-  application_id = azuread_application.example.application_id
-}
+2. Save and Run
 
-# Generate secrets and store them in Key Vault
-resource "azurerm_key_vault_secret" "example" {
-  count             = length(var.secret_names)
-  name              = element(var.secret_names, count.index)
-  value             = substr(md5(join("", [azuread_application.example.application_id, element(var.secret_names, count.index)])), 0, 32)
-  key_vault_id      = azurerm_key_vault.example.id
-}
+	1.	Save this Perl script as script_wrapper.pl.
+	2.	Make it executable:
 
-output "application_id" {
-  value = azuread_application.example.application_id
-}
+chmod +x script_wrapper.pl
 
-output "client_id" {
-  value = azuread_service_principal.example.application_id
-}
 
-output "tenant_id" {
-  value = var.tenant_id
-}
+	3.	Run the script:
 
-output "secrets" {
-  value = { for s in azurerm_key_vault_secret.example : s.name => s.value }
-}
+./script_wrapper.pl
+
+
+
+3. Compile the Perl Script into a Binary
+
+To create a binary executable from the Perl script, you can use PAR::Packer, which allows you to compile Perl scripts into standalone binaries.
+	1.	Install PAR::Packer if it’s not already installed:
+
+cpan install PAR::Packer
+
+
+	2.	Use pp to compile the Perl script:
+
+pp -o script_binary script_wrapper.pl
+
+
+
+This will produce a standalone binary named script_binary. When executed, it will run the embedded shell script as if it were a native binary.
