@@ -1,5 +1,40 @@
-To set the GroupID value to 3000 for the storage class `openebs-no-replica-wx`, we need to recreate the storage class. This requires destroying all application PVCs currently using the `openebs-no-replica-wx` storage class.
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.List;
 
-Please delete the application PVCs using the `openebs-no-replica-wx` storage class so that we can proceed with the reinstallation.
+public class RunBashScript {
 
-Thank you.
+    public static void main(String[] args) {
+        // Define the bash script path and parameters
+        String scriptPath = "/path/to/your/script.sh"; // Replace with your script's path
+        String param1 = "arg1";
+        String param2 = "arg2";
+
+        // Create the command list
+        List<String> command = List.of("bash", scriptPath, param1, param2);
+
+        try {
+            // Initialize ProcessBuilder
+            ProcessBuilder processBuilder = new ProcessBuilder(command);
+            processBuilder.redirectErrorStream(true);
+
+            // Start the process
+            Process process = processBuilder.start();
+
+            // Capture the output
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+            }
+
+            // Wait for the process to complete and get the exit code
+            int exitCode = process.waitFor();
+            System.out.println("Process exited with code: " + exitCode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
