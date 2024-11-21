@@ -1,5 +1,1 @@
-#!/bin/bash
-echo "Script executed with parameters:"
-echo "Parameter 1: $1"
-echo "Parameter 2: $2"
-exit 0
+As discussed, due to an IP conflict with another AlC application, the AlC IP migration to the DCU VM has been rolled back. As a result, the DCU kgm1c site will remain inactive for an indefinite period.
