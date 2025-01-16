@@ -1,1 +1,7 @@
-This subscription is a shared one that hosts multiple applications, each with a different mots ID. We have already implemented a shared MTA solution using MechID, but all application traffic is routed from dedicated MTA VMs to a shared MTA mailbox with MechID. This centralized solution is provided at the platform level, so applications do not need to onboard to the shared mailbox individually.
+“Hi Kailas,
+
+This was completed before I went on OOO. Let me verify it again, as we might need to retest after the GitHub migration.
+
+Today, I had a call with Louis, and it seems the KY secrets rules have changed again. Disabling old secrets with an expiry date is no longer sufficient. I believe we need to update and enhance our script before applying the cron job (PUPITER-3343) in the environment.
+
+@Gurajapu, @Amar, do you have a point of contact who can clarify all the secrets rules/changes to ensure we aren’t missing anything?”
