@@ -1,1 +1,19 @@
-“We are currently working on manually migrating the ADO repository to the GitHub repository. Migrating the SMLS repository presents some challenges due to differences in pipeline configurations and layers compared to other MCOM platform pipelines. However, we are actively addressing these challenges and working on the changes required for GitHub connectivity.”
+{
+  "approvers": [
+    {
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "role": "Team Lead"
+    },
+    {
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "role": "Manager"
+    },
+    {
+      "name": "Alex Johnson",
+      "email": "alex.johnson@example.com",
+      "role": "Director"
+    }
+  ]
+}
