@@ -1,19 +1,18 @@
-{
-  "approvers": [
-    {
-      "name": "John Doe",
-      "email": "john.doe@example.com",
-      "role": "Team Lead"
-    },
-    {
-      "name": "Jane Smith",
-      "email": "jane.smith@example.com",
-      "role": "Manager"
-    },
-    {
-      "name": "Alex Johnson",
-      "email": "alex.johnson@example.com",
-      "role": "Director"
-    }
-  ]
-}
+The Azure Virtual Machine (VM) sizes you’ve mentioned—Standard_D16s_v5 and Standard_D16s_v3—are part of Azure’s D-series, designed for general-purpose workloads. Here’s a comparison of their key specifications:
+
+Specification	Standard_D16s_v5	Standard_D16s_v3
+vCPUs	16	16
+Memory	64 GiB	64 GiB
+Processor	Intel® Xeon® Platinum 8370C (Ice Lake) or 8473C (Sapphire Rapids)	Intel® Xeon® Platinum 8171M 2.1GHz (Skylake)
+Max Network Interfaces (NICs)	8	8
+Max Network Bandwidth	35,000 Mbps	16,000 Mbps
+Max Remote Storage Throughput	2,600 MBps	768 MBps
+
+Key Differences:
+	•	Processor Generation: The D16s_v5 utilizes newer Intel® Xeon® processors (Ice Lake or Sapphire Rapids), offering improved performance and efficiency over the older Skylake processors in the D16s_v3.
+	•	Network Bandwidth: The D16s_v5 provides a significantly higher maximum network bandwidth (35,000 Mbps) compared to the D16s_v3’s 16,000 Mbps, which can be beneficial for network-intensive applications.
+	•	Storage Throughput: The maximum remote storage throughput is higher in the D16s_v5 (2,600 MBps) compared to the D16s_v3 (768 MBps), allowing for faster data access and storage operations.
+
+Both VM sizes offer the same number of vCPUs and memory, making them suitable for general-purpose workloads such as web servers, application servers, and small to medium databases. However, the D16s_v5’s enhanced network and storage capabilities, along with its newer processor architecture, may provide better performance for more demanding applications.
+
+For detailed specifications and additional information, you can refer to Azure’s official documentation on the Dv5-series and Dv3-series virtual machines.  ￼
