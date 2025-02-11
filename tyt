@@ -1,3 +1,4 @@
-As discussed during the call, this will be a flash cut during the App Ob pipeline migration. In the meantime, we expect all applications to be ready with their GitHub repositories and prerequisites completed before the pipeline migration.
+We are also facing an issue with platform M14223 MechID after the token reset. It seems that other systems, apart from the intended platform, are using this old MechID. To prevent any issues, we have decided to use a separate MechID for the production environment.
 
-I have updated the timeline for the NSAS non-prod environment in the wiki page below, with the migration scheduled for February 10. A notification will also be sent with the maintenance window details.
+Could you please remove MechID M14223 from the wiki below and instruct users to use an alternative MechID?
+
