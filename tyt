@@ -1,4 +1,12 @@
-We are also facing an issue with platform M14223 MechID after the token reset. It seems that other systems, apart from the intended platform, are using this old MechID. To prevent any issues, we have decided to use a separate MechID for the production environment.
+#!/bin/bash
 
-Could you please remove MechID M14223 from the wiki below and instruct users to use an alternative MechID?
+# Define the input file
+input_file="input.txt"
 
+# Read the file line by line
+while IFS=' ' read -r param1 param2 param3; do
+    echo "Parameter 1: $param1"
+    echo "Parameter 2: $param2"
+    echo "Parameter 3: $param3"
+    echo "----------------------"
+done < "$input_file"
