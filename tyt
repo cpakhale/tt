@@ -1,12 +1,1 @@
-#!/bin/bash
-
-# Define the input file
-input_file="input.txt"
-
-# Read the file line by line
-while IFS=' ' read -r param1 param2 param3; do
-    echo "Parameter 1: $param1"
-    echo "Parameter 2: $param2"
-    echo "Parameter 3: $param3"
-    echo "----------------------"
-done < "$input_file"
+As discussed earlier, you were planning to engage the CSO team for more clarity on time-bound access restrictions. Could you please set up a call with them to clarify this?
