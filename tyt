@@ -1,1 +1,1 @@
-We are providing the application team with sufficient access to perform their day-to-day activities and manage their resources. Any other changes should be carried out through ADO Pipelines.
+To clarify further, the misconfiguration in the ingress definition on the application side was affecting all cluster applications, making it time-consuming to identify the root cause. We collaborated with the application team to fix the ingress definition. Additionally, we are discussing internally to implement measures and monitoring to prevent such issues in the future.
