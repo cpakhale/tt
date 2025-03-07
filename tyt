@@ -1,1 +1,7 @@
-To clarify further, the misconfiguration in the ingress definition on the application side was affecting all cluster applications, making it time-consuming to identify the root cause. We collaborated with the application team to fix the ingress definition. Additionally, we are discussing internally to implement measures and monitoring to prevent such issues in the future.
+Status on SNA1b:
+
+There is a power outage in SNA1b, impacting DCAE services, including the SNA1b Consul.
+
+We attempted to bring up the old WHPA (Consul DR site), but the cluster was not healthy. As a result, we decided to create a new cluster on WHPA, but the attempt failed due to an AIC DNS issue.
+
+Subsequently, we started creating a new cluster on KGM1b. However, in the meantime, we managed to bring up the old WHPA (Consul DR site), and the DCAE team is now verifying it.
