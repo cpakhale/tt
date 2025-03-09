@@ -1,7 +1,4 @@
-Status on SNA1b:
+laz vm update --resource-group <RESOURCE_GROUP> --name <VM_NAME> \
+    --set storageProfile.imageReference.id="/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/<RESOURCE_GROUP>/providers/Microsoft.Compute/galleries/<GALLERY_NAME>/images/<IMAGE_DEFINITION>/versions/latest"
 
-There is a power outage in SNA1b, impacting DCAE services, including the SNA1b Consul.
-
-We attempted to bring up the old WHPA (Consul DR site), but the cluster was not healthy. As a result, we decided to create a new cluster on WHPA, but the attempt failed due to an AIC DNS issue.
-
-Subsequently, we started creating a new cluster on KGM1b. However, in the meantime, we managed to bring up the old WHPA (Consul DR site), and the DCAE team is now verifying it.
+az vm reimage --resource-group <RESOURCE_GROUP> --name <VM_NAME>
