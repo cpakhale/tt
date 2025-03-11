@@ -1,4 +1,1 @@
-laz vm update --resource-group <RESOURCE_GROUP> --name <VM_NAME> \
-    --set storageProfile.imageReference.id="/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/<RESOURCE_GROUP>/providers/Microsoft.Compute/galleries/<GALLERY_NAME>/images/<IMAGE_DEFINITION>/versions/latest"
-
-az vm reimage --resource-group <RESOURCE_GROUP> --name <VM_NAME>
+Sure, will schedule CR and will implement changes except for ncaas vault as its live in production in kgm1b. other prod env will take care without CR.
