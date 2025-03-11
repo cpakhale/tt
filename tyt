@@ -1,1 +1,1 @@
-Sure, will schedule CR and will implement changes except for ncaas vault as its live in production in kgm1b. other prod env will take care without CR.
+Sure, I will schedule the CR and implement the changes, except for the Ncaas vault since it is live in production in KGM1B. The changes in other production environments will be handled without a CR.
