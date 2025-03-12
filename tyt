@@ -1,7 +1,1 @@
-I worked with Hong to add the fluentbit namespace to the exclude list in the Fluentbit config on the nsas-westus2-p1a environment.
-
-@SOLOMON, STEVEN J — Could you please verify from your side as well? Once confirmed, I’ll implement the same change on the eastus2 production environment.
-
-@ANUMOLU, SWAPNA — I agree that we should set up alerting on Fluentbit, but we need to find an optimized way to send logs to LAW. Perhaps we can use Kibana rules to forward logs with more refined filtering.
-
-We also need a deeper technical discussion about the log pattern below, as it’s a false alert. The message is informational but is incorrectly tagged with stderr. We’ll raise a defect to investigate this further.
+We had a discussion with Ken yesterday, and there are still a few open items that he will clarify soon. Once we have a complete plan and all the necessary details, we will schedule a call and send an email update to all NETSYS members.
