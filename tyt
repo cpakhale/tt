@@ -1,11 +1,1 @@
-NETSYS and NEONNETSYS Code Cloud Migration Scheduled for March 24, 2025
-
-NETSYS and NEONNETSYS code cloud migration is scheduled for March 24, 2025. Please join the call to get more details about the migration plan.
-
-Key Points:
-	•	Migration Date: March 24, 2025
-	•	Application Team: Preparation work for migration from the repository.
-	•	Platform Team: Post-migration tasks.
-	•	Application Team: Post-migration tasks.
-
-Kindly ensure your participation and readiness for the migration process.
+We have implemented the Istio Ambient version on the shared development environment, which required a few changes on the application side. During the troubleshooting session, the following solution was recommended, tested, and verified on one of the microservices. The NCaaS developer is now applying the same changes to all microservices for the NCaaS application in the development environment.
