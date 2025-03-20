@@ -1,1 +1,7 @@
-Ondrej reverted the ingress annotation from spec.ingressClassName: nginx (which was changed due to a Helm warning) back to kubernetes.io/ingress.class: nginx. As a result, it registered successfully with the ingress controller, and the application is now accessible. In the meantime, we have opened defect DEFECT-75473 with the Istio developer since kubernetes.io/ingress.class is deprecated in the new AKS version.
+Hi Kailas,
+
+We are referring to the Deployment Guide to create the DCU platform while building or rebuilding the environment. It seems that the delivery component mentioned below is not listed in the Components list table, which might be why it was missed during the deployment on the Austin Dev environment.
+
+I’ve asked Pankaj to deploy and verify it. We will confirm once it’s completed.
+
+@AGARWAL, ANURAG — Could you please update the Components list table to include Label and kubemon with the DG link?
