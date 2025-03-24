@@ -1,1 +1,5 @@
-git clone https://$(GITHUB_SERVICE_CONNECTION_PAT)@github.com/your-org-or-username/your-repo.git
+Important Notice:
+
+The migration of NETSYS and NEONNETSYS Code Cloud repositories to GitHub will proceed as scheduled. However, the NEONNETSYS PROD update, which includes the Platform Team’s task (ArgoCD MRM update) and the Application task (updating Jsonnet in the GitHub repository), has been postponed to next week. We will share the updated schedule soon.
+
+The Application Team will not be able to make any changes until the next maintenance window. In case of an emergency requiring application changes, please contact the Platform Team to update the MRM configuration to point to the GitHub URL. Additionally, the Application Team will need to update the Jsonnet files to reference the GitHub URL.
