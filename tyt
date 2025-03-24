@@ -1,7 +1,1 @@
-Hi Kailas,
-
-We are referring to the Deployment Guide to create the DCU platform while building or rebuilding the environment. It seems that the delivery component mentioned below is not listed in the Components list table, which might be why it was missed during the deployment on the Austin Dev environment.
-
-I’ve asked Pankaj to deploy and verify it. We will confirm once it’s completed.
-
-@AGARWAL, ANURAG — Could you please update the Components list table to include Label and kubemon with the DG link?
+git clone https://$(GITHUB_SERVICE_CONNECTION_PAT)@github.com/your-org-or-username/your-repo.git
