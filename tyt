@@ -1,8 +1,5 @@
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: configmap-watcher
-rules:
-- apiGroups: [""]
-  resources: ["configmaps"]
-  verbs: ["get", "list", "watch"]
+Hi Steve,
+
+We are not using App Registration for RTF installation or registration on AnyPoint. I also do not have access to the “NEON-PRaaS-PROD-CLIENT” App Registration, which appears to be part of the app flow/authentication process.
+
+The App Registration description mentions “PRaaS INLAP Client Credentials,” which suggests these credentials may need to be exchanged with the Inlap team. Shoba might be able to assist with this—I’m including her in the email chain.
