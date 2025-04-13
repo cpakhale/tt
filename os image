@@ -1,0 +1,26 @@
+To reimage an Azure VM using the Azure CLI without replacing it and with the latest custom version of the image, you can use the az vm reimage command. However, to ensure it uses the latest custom version, you need to specify the image reference directly if the VM was created from a shared image or a gallery image.
+
+Command Example:
+
+az vm reimage --resource-group <RESOURCE_GROUP> --name <VM_NAME>
+
+Explanation:
+	•	--resource-group – Name of the resource group.
+	•	--name – Name of the VM to reimage.
+
+Key Points:
+	1.	This command will retain the existing OS disk and reimage it using the latest version of the base image used to create the VM.
+	2.	Data on the temporary disk will be lost.
+	3.	Persistent data disks will not be affected.
+	4.	If the VM was created from a shared image or gallery image, the VM will be reimaged using the latest available version of the image in the gallery.
+
+Example with a custom gallery image:
+
+If the VM was created from a shared image, you can update the VM’s image reference first and then reimage:
+
+az vm update --resource-group <RESOURCE_GROUP> --name <VM_NAME> \
+    --set storageProfile.imageReference.id="/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/<RESOURCE_GROUP>/providers/Microsoft.Compute/galleries/<GALLERY_NAME>/images/<IMAGE_DEFINITION>/versions/latest"
+
+az vm reimage --resource-group <RESOURCE_GROUP> --name <VM_NAME>
+
+Let me know if you need help with the image reference!
