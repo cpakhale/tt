@@ -1,5 +1,11 @@
-Hi Steve,
+parameters:
+  - name: isProd
+    type: boolean
+    default: false
 
-We are not using App Registration for RTF installation or registration on AnyPoint. I also do not have access to the “NEON-PRaaS-PROD-CLIENT” App Registration, which appears to be part of the app flow/authentication process.
+variables:
+  myVar: ${{ if eq(parameters.isProd, true) }}: ProductionValue
+  myVar: ${{ if eq(parameters.isProd, false) }}: DevValue
 
-The App Registration description mentions “PRaaS INLAP Client Credentials,” which suggests these credentials may need to be exchanged with the Inlap team. Shoba might be able to assist with this—I’m including her in the email chain.
+steps:
+  - script: echo "myVar is $(myVar)"
