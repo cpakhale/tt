@@ -1,11 +1,6 @@
-parameters:
-  - name: isProd
-    type: boolean
-    default: false
 
-variables:
-  myVar: ${{ if eq(parameters.isProd, true) }}: ProductionValue
-  myVar: ${{ if eq(parameters.isProd, false) }}: DevValue
+We are planning to perform the AKS 1.31.2 upgrade for NSAS PROD Eastus2 on April 30th. The upgrade will target the management plane and unused node pools. We anticipate minimal disruption to the application during this process.
 
-steps:
-  - script: echo "myVar is $(myVar)"
+Please ensure your applications have been validated in the lower environment with AKS version 1.31.2.
+
+Let us know if you have any concerns.
