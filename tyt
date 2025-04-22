@@ -1,53 +1,35 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"os"
 	"os/exec"
 )
 
-type VMExtension struct {
-	Name   string `json:"name"`
-	Type   string `json:"type"`
-	Status struct {
-		Code          string `json:"code"`
-		DisplayStatus string `json:"displayStatus"`
-		Message       string `json:"message"`
-		Level         string `json:"level"`
-	} `json:"statuses"`
-}
-
 func main() {
-	resourceGroup := "your-resource-group"
-	vmName := "your-vm-name"
+	if len(os.Args) != 4 {
+		fmt.Println("Usage: go run get_vm_extension_status.go <resourceGroup> <vmName> <extensionName>")
+		return
+	}
 
-	// az command to get extensions
-	cmd := exec.Command("az", "vm", "extension", "list",
+	resourceGroup := os.Args[1]
+	vmName := os.Args[2]
+	extensionName := os.Args[3]
+
+	cmd := exec.Command("az", "vm", "extension", "show",
 		"--resource-group", resourceGroup,
 		"--vm-name", vmName,
-		"--output", "json")
+		"--name", extensionName,
+		"--query", "instanceView.statuses",
+		"--output", "table")
 
-	output, err := cmd.Output()
+	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Println("Error executing az command:", err)
+		fmt.Printf("Error running az command: %v\n", err)
+		fmt.Println(string(output))
 		return
 	}
 
-	var extensions []map[string]interface{}
-	err = json.Unmarshal(output, &extensions)
-	if err != nil {
-		fmt.Println("Error parsing JSON output:", err)
-		return
-	}
-
-	for _, ext := range extensions {
-		fmt.Println("Extension Name:", ext["name"])
-		if statuses, ok := ext["statuses"].([]interface{}); ok && len(statuses) > 0 {
-			status := statuses[0].(map[string]interface{})
-			fmt.Println("  Status:", status["displayStatus"])
-			fmt.Println("  Message:", status["message"])
-		} else {
-			fmt.Println("  No status available.")
-		}
-	}
+	fmt.Println("Extension Status:")
+	fmt.Println(string(output))
 }
