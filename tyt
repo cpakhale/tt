@@ -1,6 +1,53 @@
+package main
 
-We are planning to perform the AKS 1.31.2 upgrade for NSAS PROD Eastus2 on April 30th. The upgrade will target the management plane and unused node pools. We anticipate minimal disruption to the application during this process.
+import (
+	"encoding/json"
+	"fmt"
+	"os/exec"
+)
 
-Please ensure your applications have been validated in the lower environment with AKS version 1.31.2.
+type VMExtension struct {
+	Name   string `json:"name"`
+	Type   string `json:"type"`
+	Status struct {
+		Code          string `json:"code"`
+		DisplayStatus string `json:"displayStatus"`
+		Message       string `json:"message"`
+		Level         string `json:"level"`
+	} `json:"statuses"`
+}
 
-Let us know if you have any concerns.
+func main() {
+	resourceGroup := "your-resource-group"
+	vmName := "your-vm-name"
+
+	// az command to get extensions
+	cmd := exec.Command("az", "vm", "extension", "list",
+		"--resource-group", resourceGroup,
+		"--vm-name", vmName,
+		"--output", "json")
+
+	output, err := cmd.Output()
+	if err != nil {
+		fmt.Println("Error executing az command:", err)
+		return
+	}
+
+	var extensions []map[string]interface{}
+	err = json.Unmarshal(output, &extensions)
+	if err != nil {
+		fmt.Println("Error parsing JSON output:", err)
+		return
+	}
+
+	for _, ext := range extensions {
+		fmt.Println("Extension Name:", ext["name"])
+		if statuses, ok := ext["statuses"].([]interface{}); ok && len(statuses) > 0 {
+			status := statuses[0].(map[string]interface{})
+			fmt.Println("  Status:", status["displayStatus"])
+			fmt.Println("  Message:", status["message"])
+		} else {
+			fmt.Println("  No status available.")
+		}
+	}
+}
