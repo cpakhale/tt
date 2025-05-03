@@ -1,35 +1,84 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
+	"strings"
 )
 
-func main() {
-	if len(os.Args) != 4 {
-		fmt.Println("Usage: go run get_vm_extension_status.go <resourceGroup> <vmName> <extensionName>")
-		return
-	}
+type Vault struct {
+	Name          string `json:"name"`
+	ResourceGroup string `json:"resourceGroup"`
+}
 
-	resourceGroup := os.Args[1]
-	vmName := os.Args[2]
-	extensionName := os.Args[3]
+type BackupItem struct {
+	Name          string `json:"name"`
+	PolicyName    string `json:"policyName"`
+	ContainerName string `json:"containerName"`
+}
 
-	cmd := exec.Command("az", "vm", "extension", "show",
-		"--resource-group", resourceGroup,
-		"--vm-name", vmName,
-		"--name", extensionName,
-		"--query", "instanceView.statuses",
-		"--output", "table")
+func runAzCommand(args ...string) []byte {
+	cmd := exec.Command("az", args...)
+	var out bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &stderr
 
-	output, err := cmd.CombinedOutput()
+	err := cmd.Run()
 	if err != nil {
-		fmt.Printf("Error running az command: %v\n", err)
-		fmt.Println(string(output))
-		return
+		log.Fatalf("Error running command: az %s\n%s", strings.Join(args, " "), stderr.String())
+	}
+	return out.Bytes()
+}
+
+func main() {
+	if len(os.Args) != 2 {
+		fmt.Println("Usage: go run script.go <VM_NAME>")
+		os.Exit(1)
 	}
 
-	fmt.Println("Extension Status:")
-	fmt.Println(string(output))
+	vmName := os.Args[1]
+
+	// Step 1: List all vaults and their resource groups
+	vaultsJSON := runAzCommand("backup", "vault", "list", "-o", "json")
+	var vaults []Vault
+	json.Unmarshal(vaultsJSON, &vaults)
+
+	found := false
+
+	// Step 2: Check each vault for backup items related to the VM
+	for _, vault := range vaults {
+		itemsJSON := runAzCommand(
+			"backup", "item", "list",
+			"--vault-name", vault.Name,
+			"--resource-group", vault.ResourceGroup,
+			"--backup-management-type", "AzureIaasVM",
+			"-o", "json",
+		)
+
+		var items []BackupItem
+		json.Unmarshal(itemsJSON, &items)
+
+		for _, item := range items {
+			if strings.Contains(item.Name, vmName) {
+				fmt.Printf("VM Name: %s\n", vmName)
+				fmt.Printf("Vault Name: %s\n", vault.Name)
+				fmt.Printf("Resource Group: %s\n", vault.ResourceGroup)
+				fmt.Printf("Policy Name: %s\n", item.PolicyName)
+				found = true
+				break
+			}
+		}
+		if found {
+			break
+		}
+	}
+
+	if !found {
+		fmt.Printf("No backup details found for VM: %s\n", vmName)
+	}
 }
