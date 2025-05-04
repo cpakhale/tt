@@ -1,2 +1,5 @@
+sudo nano /etc/udev/rules.d/99-block-unwanted-sda-sdb.rules
+
+
 # Block other disks from binding to sda or sdb
 KERNEL=="sd[a-b]", ATTRS{serial}!="EXPECTED_OS_OR_RESOURCE_DISK_SERIAL", OPTIONS+="ignore_device"
