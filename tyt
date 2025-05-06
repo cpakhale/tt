@@ -7,3 +7,7 @@ sudo cloud-init modules --mode=final
 sudo bash /var/lib/cloud/instance/scripts/part-001
 
 /var/lib/cloud/instance/user-data.txt
+
+
+
+“We maintain a separate ACR for each platform. However, for NSAS Non-Prod and Prod environments, the same ACR is being used. Each of NSAS, NEON-NSAS, and NDCU has its own ACR, as recommended by the public cloud guidelines.”
