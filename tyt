@@ -10,4 +10,10 @@ sudo bash /var/lib/cloud/instance/scripts/part-001
 
 
 
-“We maintain a separate ACR for each platform. However, for NSAS Non-Prod and Prod environments, the same ACR is being used. Each of NSAS, NEON-NSAS, and NDCU has its own ACR, as recommended by the public cloud guidelines.”
+This is the first time we’ve encountered this issue. Our automated process has been functioning without any problems for several years until now.
+
+We are currently investigating to identify the root cause of the certificate renewal failure. Our initial suspicion is that the certificate script failed to download the necessary files, resulting in the new certificate not being generated.
+
+To prevent such issues in the future, we are implementing alerting using the “expiration-monitoring” tool to track certificate expirations across all endpoints.
+
+Yesterday, we received a call from Om, who mentioned that one flow was impacted due to a service restart. However, there was no mention of a service outage or Gtalk engagement related to this issue.
