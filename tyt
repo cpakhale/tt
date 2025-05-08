@@ -16,4 +16,6 @@ We are currently investigating to identify the root cause of the certificate ren
 
 To prevent such issues in the future, we are implementing alerting using the “expiration-monitoring” tool to track certificate expirations across all endpoints.
 
-Yesterday, we received a call from Om, who mentioned that one flow was impacted due to a service restart. However, there was no mention of a service outage or Gtalk engagement related to this issue.
+We were unable to identify the environment using the earlier information. Based on the IPs listed in the table, it appears they belong to the Austin test environment. However, we do not have any platform services running on ports 30035 or 32440. These ports may be associated with kube-vip services.
+
+We recommend the application team verify this from their end.
