@@ -1,0 +1,84 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "policyDefinitionId": {
+      "type": "string",
+      "metadata": {
+        "description": "Policy Definition ID"
+      }
+    },
+    "policyAssignmentName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name for the policy assignment"
+      }
+    },
+    "policyAssignmentDisplayName": {
+      "type": "string",
+      "metadata": {
+        "description": "Display name for the policy assignment"
+      }
+    },
+    "policyAssignmentDescription": {
+      "type": "string",
+      "metadata": {
+        "description": "Description for the policy assignment"
+      }
+    },
+    "assignmentScope": {
+      "type": "string",
+      "metadata": {
+        "description": "Scope for the policy assignment"
+      }
+    },
+    "daysBeforeExpiry": {
+      "type": "int",
+      "defaultValue": 30,
+      "metadata": {
+        "description": "Days before expiry to trigger alert"
+      }
+    },
+    "effect": {
+      "type": "string",
+      "defaultValue": "audit",
+      "allowedValues": [
+        "audit",
+        "disabled"
+      ],
+      "metadata": {
+        "description": "Policy effect"
+      }
+    }
+  },
+  "variables": {
+    "policyAssignmentId": "[concat(parameters('assignmentScope'), '/providers/Microsoft.Authorization/policyAssignments/', parameters('policyAssignmentName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Authorization/policyAssignments",
+      "apiVersion": "2022-06-01",
+      "name": "[parameters('policyAssignmentName')]",
+      "properties": {
+        "displayName": "[parameters('policyAssignmentDisplayName')]",
+        "description": "[parameters('policyAssignmentDescription')]",
+        "policyDefinitionId": "[parameters('policyDefinitionId')]",
+        "scope": "[parameters('assignmentScope')]",
+        "parameters": {
+          "daysBeforeExpiry": {
+            "value": "[parameters('daysBeforeExpiry')]"
+          },
+          "effect": {
+            "value": "[parameters('effect')]"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "policyAssignmentId": {
+      "type": "string",
+      "value": "[variables('policyAssignmentId')]"
+    }
+  }
+}

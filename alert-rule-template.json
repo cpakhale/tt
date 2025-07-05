@@ -1,0 +1,117 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "alertRuleName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name for the alert rule"
+      }
+    },
+    "alertRuleDisplayName": {
+      "type": "string",
+      "metadata": {
+        "description": "Display name for the alert rule"
+      }
+    },
+    "alertRuleDescription": {
+      "type": "string",
+      "metadata": {
+        "description": "Description for the alert rule"
+      }
+    },
+    "resourceGroupName": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group name where the alert rule will be created"
+      }
+    },
+    "actionGroupId": {
+      "type": "string",
+      "metadata": {
+        "description": "Action group ID for sending notifications"
+      }
+    },
+    "subscriptionId": {
+      "type": "string",
+      "defaultValue": "[subscription().subscriptionId]",
+      "metadata": {
+        "description": "Subscription ID to monitor"
+      }
+    },
+    "evaluationFrequency": {
+      "type": "string",
+      "defaultValue": "P1D",
+      "allowedValues": [
+        "PT1H",
+        "PT6H",
+        "PT12H",
+        "P1D"
+      ],
+      "metadata": {
+        "description": "How often the alert rule is evaluated"
+      }
+    },
+    "windowSize": {
+      "type": "string",
+      "defaultValue": "P1D",
+      "allowedValues": [
+        "PT1H",
+        "PT6H",
+        "PT12H",
+        "P1D",
+        "P7D"
+      ],
+      "metadata": {
+        "description": "Time window for the alert rule"
+      }
+    }
+  },
+  "variables": {
+    "alertRuleId": "[resourceId('Microsoft.Insights/scheduledQueryRules', parameters('alertRuleName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Insights/scheduledQueryRules",
+      "apiVersion": "2021-08-01",
+      "name": "[parameters('alertRuleName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "displayName": "[parameters('alertRuleDisplayName')]",
+        "description": "[parameters('alertRuleDescription')]",
+        "severity": 2,
+        "enabled": true,
+        "evaluationFrequency": "[parameters('evaluationFrequency')]",
+        "scopes": [
+          "[concat('/subscriptions/', parameters('subscriptionId'))]"
+        ],
+        "windowSize": "[parameters('windowSize')]",
+        "criteria": {
+          "allOf": [
+            {
+              "query": "PolicyInsights\n| where PolicyDefinitionAction == 'audit'\n| where PolicyDefinitionName contains 'expiring' or PolicyDefinitionName contains 'expiry'\n| where ComplianceState == 'NonCompliant'\n| project TimeGenerated, ResourceId, ResourceType, PolicyDefinitionName, ComplianceState, ResourceLocation\n| order by TimeGenerated desc",
+              "timeAggregation": "Count",
+              "operator": "GreaterThan",
+              "threshold": 0,
+              "failingPeriods": {
+                "numberOfEvaluationPeriods": 1,
+                "minFailingPeriodsToAlert": 1
+              }
+            }
+          ]
+        },
+        "actions": {
+          "actionGroups": [
+            "[parameters('actionGroupId')]"
+          ]
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "alertRuleId": {
+      "type": "string",
+      "value": "[variables('alertRuleId')]"
+    }
+  }
+}

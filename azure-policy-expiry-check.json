@@ -1,0 +1,88 @@
+{
+  "mode": "All",
+  "policyRule": {
+    "if": {
+      "anyOf": [
+        {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.KeyVault/vaults/secrets"
+            },
+            {
+              "field": "Microsoft.KeyVault/vaults/secrets/attributes.expires",
+              "exists": "true"
+            },
+            {
+              "value": "[dateTimeAdd(utcNow(), 'P30D')]",
+              "greater": "[field('Microsoft.KeyVault/vaults/secrets/attributes.expires')]"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.KeyVault/vaults/certificates"
+            },
+            {
+              "field": "Microsoft.KeyVault/vaults/certificates/attributes.expires",
+              "exists": "true"
+            },
+            {
+              "value": "[dateTimeAdd(utcNow(), 'P30D')]",
+              "greater": "[field('Microsoft.KeyVault/vaults/certificates/attributes.expires')]"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "field": "type",
+              "equals": "Microsoft.Storage/storageAccounts"
+            },
+            {
+              "field": "Microsoft.Storage/storageAccounts/keyCreationTime",
+              "exists": "true"
+            },
+            {
+              "value": "[dateTimeAdd(utcNow(), 'P30D')]",
+              "greater": "[dateTimeAdd(field('Microsoft.Storage/storageAccounts/keyCreationTime'), 'P90D')]"
+            }
+          ]
+        }
+      ]
+    },
+    "then": {
+      "effect": "audit"
+    }
+  },
+  "parameters": {
+    "daysBeforeExpiry": {
+      "type": "Integer",
+      "metadata": {
+        "displayName": "Days before expiry to trigger alert",
+        "description": "Number of days before expiry to trigger the alert"
+      },
+      "defaultValue": 30
+    },
+    "effect": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Effect",
+        "description": "Enable or disable the execution of the policy"
+      },
+      "allowedValues": [
+        "audit",
+        "disabled"
+      ],
+      "defaultValue": "audit"
+    }
+  },
+  "metadata": {
+    "category": "Security",
+    "version": "1.0.0",
+    "displayName": "Audit resources with expiring secrets and certificates",
+    "description": "This policy audits Key Vault secrets, certificates, and storage account keys that are expiring within the specified timeframe"
+  }
+}
