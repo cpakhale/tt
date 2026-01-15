@@ -1,21 +1,21 @@
-sudo cloud-init clean --logs
-sudo cloud-init init
-sudo cloud-init modules --mode=config
-sudo cloud-init modules --mode=final
+class Multiset:
+    def __init__(self):
+        self.counts = {}
+        self.total = 0
 
+    def add(self, val):
+        self.counts[val] = self.counts.get(val, 0) + 1
+        self.total += 1
 
-sudo bash /var/lib/cloud/instance/scripts/part-001
+    def remove(self, val):
+        if val in self.counts:
+            self.counts[val] -= 1
+            self.total -= 1
+            if self.counts[val] == 0:
+                del self.counts[val]
 
-/var/lib/cloud/instance/user-data.txt
+    def __contains__(self, val):
+        return val in self.counts
 
-
-
-This is the first time we’ve encountered this issue. Our automated process has been functioning without any problems for several years until now.
-
-We are currently investigating to identify the root cause of the certificate renewal failure. Our initial suspicion is that the certificate script failed to download the necessary files, resulting in the new certificate not being generated.
-
-To prevent such issues in the future, we are implementing alerting using the “expiration-monitoring” tool to track certificate expirations across all endpoints.
-
-We were unable to identify the environment using the earlier information. Based on the IPs listed in the table, it appears they belong to the Austin test environment. However, we do not have any platform services running on ports 30035 or 32440. These ports may be associated with kube-vip services.
-
-We recommend the application team verify this from their end.
+    def __len__(self):
+        return self.total
