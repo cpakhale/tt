@@ -1,21 +1,25 @@
-class Multiset:
-    def __init__(self):
-        self.counts = {}
-        self.total = 0
-
-    def add(self, val):
-        self.counts[val] = self.counts.get(val, 0) + 1
-        self.total += 1
-
-    def remove(self, val):
-        if val in self.counts:
-            self.counts[val] -= 1
-            self.total -= 1
-            if self.counts[val] == 0:
-                del self.counts[val]
-
-    def __contains__(self, val):
-        return val in self.counts
-
-    def __len__(self):
-        return self.total
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hacker-company
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: hacker-company
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: 134148934511.dkr.ecr.us-east-l.amazonaws.com/hr/redis:latest
+          ports:
+            - containerPort: 6379
