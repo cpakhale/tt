@@ -1,29 +1,20 @@
-apiVersion: batch/v1
-kind: CronJob
+apiVersion: v1
+kind: Namespace
 metadata:
-  name: build
+  name: hacker-company
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ping
   namespace: hacker-company
 spec:
-  schedule: "* * * * *"
-  concurrencyPolicy: Forbid
-  jobTemplate:
+  template:
     spec:
-      template:
-        spec:
-          restartPolicy: Never
-          containers:
-            - name: build
-              image: g:latest
-              workingDir: /mnt/src
-              command:
-                - sh
-                - -c
-                - goc -o build main.c
-              volumeMounts:
-                - name: src-volume
-                  mountPath: /mnt/src
-          volumes:
-            - name: src-volume
-              hostPath:
-                path: /home/ubuntu/1171986-kubernetes-cronjob-basic-implementation/src
-                type: Directory
+      restartPolicy: Never
+      containers:
+        - name: ping
+          image: busybox:latest
+          command:
+            - ping
+            - google.com
