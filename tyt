@@ -1,13 +1,29 @@
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
+apiVersion: batch/v1
+kind: CronJob
 metadata:
-  name: archive
-  annotations:
-    storageclass.kubernetes.io/is-default-class: "true"
-provisioner: nfs
-parameters:
-  server: archive.hacker-company.com
-  path: /current
-  readOnly: "true"
-reclaimPolicy: Retain
-volumeBindingMode: Immediate
+  name: build
+  namespace: hacker-company
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: build
+              image: g:latest
+              workingDir: /mnt/src
+              command:
+                - sh
+                - -c
+                - goc -o build main.c
+              volumeMounts:
+                - name: src-volume
+                  mountPath: /mnt/src
+          volumes:
+            - name: src-volume
+              hostPath:
+                path: /home/ubuntu/1171986-kubernetes-cronjob-basic-implementation/src
+                type: Directory
