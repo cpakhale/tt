@@ -1,25 +1,13 @@
-apiVersion: v1
-kind: Namespace
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
 metadata:
-  name: hacker-company
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: redis
-  namespace: hacker-company
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: redis
-  template:
-    metadata:
-      labels:
-        app: redis
-    spec:
-      containers:
-        - name: redis
-          image: 134148934511.dkr.ecr.us-east-l.amazonaws.com/hr/redis:latest
-          ports:
-            - containerPort: 6379
+  name: archive
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: nfs
+parameters:
+  server: archive.hacker-company.com
+  path: /current
+  readOnly: "true"
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
