@@ -1,13 +1,34 @@
-# Variables
-ORGANIZATION="yourorganization"
-PROJECT="yourproject"
-BUILD_ID="yourbuildid"
-ARTIFACT_NAME="my-artifact"
-PAT="yourpersonalaccesstoken"
-
-# Get artifact download URL
-artifact_url=$(curl -u :$PAT \
-  "https://dev.azure.com/$ORGANIZATION/$PROJECT/_apis/build/builds/$BUILD_ID/artifacts?artifactName=$ARTIFACT_NAME&api-version=5.1" \
-  | jq -r '.value[0].resource.downloadUrl')
-
-echo "Download URL: $artifact_url"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+  namespace: app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      containers:
+      - name: payment-service
+        image: payment-service:latest
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 2
