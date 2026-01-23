@@ -1,34 +1,29 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: payment-service
-  namespace: app
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: payment-service
-  template:
-    metadata:
-      labels:
-        app: payment-service
-    spec:
-      containers:
-      - name: payment-service
-        image: payment-service:latest
-        ports:
-        - containerPort: 8080
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8080
-          initialDelaySeconds: 15
-          periodSeconds: 10
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 8080
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          timeoutSeconds: 2
+resource "null_resource" "copy_license" {
+
+  provisioner "file" {
+    source      = "license.key"
+    destination = "/etc/license.key"
+
+    connection {
+      type        = "ssh"
+      host        = "sh.application.local"
+      port        = 1234
+      user        = "root"
+      password    = "root"
+    }
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod 0600 /etc/license.key"
+    ]
+
+    connection {
+      type        = "ssh"
+      host        = "sh.application.local"
+      port        = 1234
+      user        = "root"
+      password    = "root"
+    }
+  }
+}
