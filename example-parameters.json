@@ -1,0 +1,31 @@
+{
+  "subscriptionId": "12345678-1234-1234-1234-123456789012",
+  "resourceGroupName": "rg-expiry-monitoring",
+  "location": "eastus",
+  "daysBeforeExpiry": 30,
+  "notificationEmail": "admin@company.com",
+  "policyDefinitions": {
+    "generalExpiry": {
+      "name": "audit-expiring-resources",
+      "displayName": "Audit resources with expiring secrets and certificates",
+      "description": "This policy audits Key Vault secrets, certificates, and storage account keys that are expiring within the specified timeframe"
+    },
+    "appSecrets": {
+      "name": "audit-expiring-app-secrets",
+      "displayName": "Audit Azure AD Applications with expiring secrets and certificates",
+      "description": "This policy audits Azure AD Applications that have secrets or certificates expiring within the specified timeframe"
+    }
+  },
+  "alertRule": {
+    "name": "expiring-resources-alert",
+    "displayName": "Expiring Resources Alert",
+    "description": "Alert for resources with expiring secrets and certificates",
+    "evaluationFrequency": "P1D",
+    "windowSize": "P1D",
+    "severity": 2
+  },
+  "actionGroup": {
+    "name": "expiry-alerts-action-group",
+    "shortName": "ExpAlerts"
+  }
+}
